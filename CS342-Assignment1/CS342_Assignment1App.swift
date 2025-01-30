@@ -7,11 +7,13 @@
 
 import SwiftUI
 
+
 @main
 struct CS342_Assignment1App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PatientList()
         }
     }
 }
+

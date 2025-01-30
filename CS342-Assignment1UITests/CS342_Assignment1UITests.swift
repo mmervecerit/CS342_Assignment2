@@ -22,22 +22,108 @@ final class CS342_Assignment1UITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    // I used chatgpt to learn about accessibility identifier and checking whether a button/field contains a string. https://chatgpt.com/share/679aedc0-450c-8004-bf87-7bec88c5c61a
+    
     @MainActor
-    func testExample() throws {
+    func testAddPatient() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        app.buttons["AddPatientButton"].tap()
+        
+        let firstNameField = app.textFields["FirstNameField"]
+        let lastNameField = app.textFields["LastNameField"]
+        let heightField = app.textFields["HeightField"]
+        let weightField = app.textFields["WeightField"]
+        
+        firstNameField.tap()
+        firstNameField.typeText("John")
+        
+        lastNameField.tap()
+        lastNameField.typeText("Doe")
+        
+        heightField.tap()
+        heightField.typeText("5.9")
+        
+        weightField.tap()
+        weightField.typeText("160")
+        
+        app.buttons["SavePatientButton"].tap()
+        
+        let patientButton = app.buttons.containing(NSPredicate(format: "label CONTAINS[c] %@", "John Doe")).firstMatch
+        XCTAssertTrue(patientButton.exists, "The patient should be added to the list")
     }
 
+    
     @MainActor
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    func testSearchPatient() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+        
+        let searchField = app.searchFields.firstMatch
+        XCTAssertTrue(searchField.exists, "Search field should appear after tapping search")
+           
+        searchField.tap()
+        searchField.typeText("Cer")
+
+        let patientButton = app.buttons.containing(NSPredicate(format: "label CONTAINS[c] %@", "Merve Cerit")).firstMatch
+        XCTAssertTrue(patientButton.exists, "The patient should appear in search results")
+            
+        patientButton.tap()
+
+        let patientDetailView = app.staticTexts["PatientDetailView"]
+        XCTAssertTrue(patientDetailView.exists, "Should navigate to patient's detail page")
+
     }
+    
+    @MainActor
+    func testPrescribeMedication() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let patientButton = app.buttons.containing(NSPredicate(format: "label CONTAINS[c] %@", "Honey Bee")).firstMatch
+        XCTAssertTrue(patientButton.exists, "Patient 'Honey Bee' should exist in the list")
+        patientButton.tap()
+
+        let prescribeButton = app.buttons["PrescribeButton"]
+        XCTAssertTrue(prescribeButton.exists, "Prescribe button should exist")
+        prescribeButton.tap()
+
+        let medNameField = app.textFields["MedicationNameField"]
+        let doseField = app.textFields["DoseField"]
+        let routeField = app.textFields["RouteField"]
+        let frequencyField = app.textFields["FrequencyField"]
+        let durationField = app.textFields["DurationField"]
+
+        XCTAssertTrue(medNameField.exists, "Medication Name field should exist")
+        XCTAssertTrue(doseField.exists, "Dose field should exist")
+        XCTAssertTrue(routeField.exists, "Route field should exist")
+        XCTAssertTrue(frequencyField.exists, "Frequency field should exist")
+        XCTAssertTrue(durationField.exists, "Duration field should exist")
+
+        medNameField.tap()
+        medNameField.typeText("Aspirin")
+
+        doseField.tap()
+        doseField.typeText("500")
+
+        routeField.tap()
+        routeField.typeText("Oral")
+
+        frequencyField.tap()
+        frequencyField.typeText("2")
+
+        durationField.tap()
+        durationField.typeText("7")
+
+        let saveButton = app.buttons["SaveMedicationButton"]
+        XCTAssertTrue(saveButton.exists, "Save button should exist")
+        saveButton.tap()
+
+        let medicationCell = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Aspirin")).firstMatch
+        XCTAssertTrue(medicationCell.exists, "The prescribed medication should be listed under current medications")
+    }
+
+
 }
