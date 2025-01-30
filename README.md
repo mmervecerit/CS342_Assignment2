@@ -59,19 +59,15 @@ This project is a Swift-based iOS application designed for CS342 at Stanford Uni
 - **Searching for Patients**: Use the search bar to filter patients by last name.
 
 ## Testing
-### Running Unit Tests
-To run unit tests, execute:
-```sh
-CMD + U (in Xcode)
-```
 ### Running UI Tests
+There are 3 positive UI test cases: create a patient, search for a patient, and prescribe medication.
 To execute UI tests:
 ```sh
 CMD + U (in Xcode with a simulator running)
 ```
 
 ## Acknowledgments
-This project was created for CS342 at Stanford University as part of an assignment on iOS app development. Some UI logic and validation techniques were learned and applied with the help of ChatGPT.
+This project was created for CS342 at Stanford University as part of an assignment on iOS app development. Some UI logic and validation techniques were learned and applied with the help of ChatGPT (see more in the code for specifics).
 
 **This README is written by ChatGPT using gitingest. ** See [chat link](https://chatgpt.com/share/679af71d-c5d0-8004-b8c6-bb22351f6175)
 
